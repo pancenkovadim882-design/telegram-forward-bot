@@ -10,7 +10,8 @@ from typing import Any
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, User
-from aiogram.filters import Command, ChatType
+from aiogram.filters import Command
+from aiogram.enums import ChatType
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from config import BOT_TOKEN, ADMIN_ID, LOG_LEVEL
