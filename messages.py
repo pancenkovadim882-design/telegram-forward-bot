@@ -87,10 +87,13 @@ async def handle_private_message(message: Message) -> None:
 def setup_message_handlers(dp: Dispatcher, db: Database) -> None:
     """Setup message forwarding handlers"""
 
-    dp.message.register(
-        lambda msg, bot: handle_group_message(msg, bot, db),
-        F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
-    )
+    async def group_message_handler(message: Message, bot: Bot):
+    await handle_group_message(message, bot, db)
+
+dp.message.register(
+    group_message_handler,
+    F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
+)
 
     dp.message.register(
         handle_private_message,
