@@ -97,4 +97,5 @@ dp.message.register(
     handle_private_message,
     F.chat.type == ChatType.PRIVATE
 )
-    logger.info("Message handlers registered")
+
+logger.info("Message handlers registered")
