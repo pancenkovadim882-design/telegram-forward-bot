@@ -16,8 +16,8 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from config import BOT_TOKEN, ADMIN_ID, LOG_LEVEL
 from database import Database
-from handlers.admin import setup_admin_handlers
-from handlers.messages import setup_message_handlers
+from admin import setup_admin_handlers
+from messages import setup_message_handlers
 
 # Configure logging
 logging.basicConfig(
