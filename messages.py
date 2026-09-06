@@ -90,10 +90,10 @@ def setup_message_handlers(dp: Dispatcher, db: Database) -> None:
     async def group_message_handler(message: Message, bot: Bot):
         await handle_group_message(message, bot, db)
 
-dp.message.register(
-    group_message_handler,
-    F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
-)
+    dp.message.register(
+        group_message_handler,
+        F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
+    )
 
     dp.message.register(
         handle_private_message,
