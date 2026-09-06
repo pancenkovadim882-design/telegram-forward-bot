@@ -271,22 +271,25 @@ def setup_admin_handlers(dp: Dispatcher, db: Database) -> None:
     dp.message.register(cmd_help, Command("help"))
     
     # Connect command - start flow
-    dp.message.register(
-        lambda msg, state: cmd_connect_start(msg, state),
-        Command("connect")
-    )
-    
-    # Connect flow - source group
-    dp.message.register(
-        lambda msg, state: process_source_group(msg, state),
-        ForwardingStates.waiting_for_source
-    )
-    
-    # Connect flow - destination group
-    dp.message.register(
-        lambda msg, state, bot: process_destination_group(msg, state, db, bot),
-        ForwardingStates.waiting_for_destination
-    )
+dp.message.register(
+    cmd_connect_start,
+    Command("connect")
+)
+
+# Connect flow - source group
+dp.message.register(
+    process_source_group,
+    ForwardingStates.waiting_for_source
+)
+
+# Connect flow - destination group
+async def destination_handler(message: Message, state: FSMContext, bot: Bot):
+    await process_destination_group(message, state, db, bot)
+
+dp.message.register(
+    destination_handler,
+    ForwardingStates.waiting_for_destination
+)
     
     # Disconnect command - start flow
     dp.message.register(
