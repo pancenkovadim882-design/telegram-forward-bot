@@ -88,7 +88,7 @@ def setup_message_handlers(dp: Dispatcher, db: Database) -> None:
     """Setup message forwarding handlers"""
 
     async def group_message_handler(message: Message, bot: Bot):
-    await handle_group_message(message, bot, db)
+        await handle_group_message(message, bot, db)
 
 dp.message.register(
     group_message_handler,
