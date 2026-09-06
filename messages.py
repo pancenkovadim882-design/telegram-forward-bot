@@ -89,14 +89,14 @@ def setup_message_handlers(dp: Dispatcher, db: Database) -> None:
     # Group messages
     dp.message.register(
         lambda msg, bot: handle_group_message(msg, bot, db),
-        ChatType.group,
-        ChatType.supergroup
+        ChatType.GROUP,
+    ChatType.SUPERGROUP
     )
     
     # Private messages (for command handling)
     dp.message.register(
         handle_private_message,
-        ChatType.private
+        ChatType.PRIVATE
     )
     
     logger.info("Message handlers registered")
