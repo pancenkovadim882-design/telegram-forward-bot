@@ -266,47 +266,60 @@ async def cmd_status(message: Message, db: Database) -> None:
 
 def setup_admin_handlers(dp: Dispatcher, db: Database) -> None:
     """Setup admin command handlers"""
-    
-    # Help command
-    dp.message.register(cmd_help, Command("help"))
-    
-    # Connect command - start flow
-dp.message.register(
-    cmd_connect_start,
-    Command("connect")
-)
 
-# Connect flow - source group
-dp.message.register(
-    process_source_group,
-    ForwardingStates.waiting_for_source
-)
-
-# Connect flow - destination group
-async def destination_handler(message: Message, state: FSMContext, bot: Bot):
-    await process_destination_group(message, state, db, bot)
-
-dp.message.register(
-    destination_handler,
-    ForwardingStates.waiting_for_destination
-)
-    
-    # Disconnect command - start flow
+    # Help
     dp.message.register(
-        lambda msg, state: cmd_disconnect(msg, state),
-        Command("disconnect")
+        cmd_help,
+        Command("help")
     )
-    
-    # Disconnect flow - destination group
+
+    # Connect
     dp.message.register(
-        lambda msg, state: process_disconnect_destination(msg, state, db),
+        cmd_connect_start,
+        Command("connect")
+    )
+
+    dp.message.register(
+        process_source_group,
+        ForwardingStates.waiting_for_source
+    )
+
+    async def connect_destination_handler(
+        message: Message,
+        state: FSMContext,
+        bot: Bot
+    ):
+        await process_destination_group(message, state, db, bot)
+
+    dp.message.register(
+        connect_destination_handler,
         ForwardingStates.waiting_for_destination
     )
-    
-    # Status command
+
+    # Disconnect
     dp.message.register(
-        lambda msg: cmd_status(msg, db),
+        cmd_disconnect,
+        Command("disconnect")
+    )
+
+    async def disconnect_destination_handler(
+        message: Message,
+        state: FSMContext
+    ):
+        await process_disconnect_destination(message, state, db)
+
+    dp.message.register(
+        disconnect_destination_handler,
+        ForwardingStates.waiting_for_destination
+    )
+
+    # Status
+    async def status_handler(message: Message):
+        await cmd_status(message, db)
+
+    dp.message.register(
+        status_handler,
         Command("status")
     )
-    
+
     logger.info("Admin handlers registered")
