@@ -9,6 +9,7 @@ from typing import List
 from aiogram import Dispatcher, Bot
 from aiogram.types import Message
 from aiogram.enums import ChatType
+from aiogram import F
 
 from database import Database
 
@@ -88,15 +89,13 @@ def setup_message_handlers(dp: Dispatcher, db: Database) -> None:
     
     # Group messages
     dp.message.register(
-        lambda msg, bot: handle_group_message(msg, bot, db),
-        ChatType.GROUP,
-    ChatType.SUPERGROUP
-    )
-    
-    # Private messages (for command handling)
-    dp.message.register(
-        handle_private_message,
-        ChatType.PRIVATE
-    )
+    lambda msg, bot: handle_group_message(msg, bot, db),
+    F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
+)
+
+dp.message.register(
+    handle_private_message,
+    F.chat.type == ChatType.PRIVATE
+)
     
     logger.info("Message handlers registered")
