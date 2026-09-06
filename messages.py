@@ -8,7 +8,7 @@ from typing import List
 
 from aiogram import Dispatcher, Bot
 from aiogram.types import Message
-from aiogram.filters import ChatType
+from aiogram.enums import ChatType
 
 from database import Database
 
